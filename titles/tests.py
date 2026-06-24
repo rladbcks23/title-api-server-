@@ -40,6 +40,18 @@ class TitleUtilsTests(SimpleTestCase):
             "How to Mine Diamonds",
         )
 
+    def test_fallback_title_converts_recipe_question(self):
+        self.assertEqual(
+            fallback_title("What is the recipe of an iron pickaxe?", 40),
+            "How to Make an Iron Pickaxe",
+        )
+
+    def test_fallback_title_converts_recipe_question_without_article(self):
+        self.assertEqual(
+            fallback_title("What's the recipe for iron pickaxe?", 40),
+            "How to Make Iron Pickaxe",
+        )
+
     def test_model_title_rejects_answer_coordinates(self):
         self.assertFalse(
             is_usable_model_title("Diamonds at Y-59", "How do I mine diamonds?")

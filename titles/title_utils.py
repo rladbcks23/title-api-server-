@@ -55,6 +55,9 @@ Examples:
 Question: How do I craft an iron pickaxe?
 Title: How to Craft an Iron Pickaxe
 
+Question: What is the recipe for an iron pickaxe?
+Title: How to Make an Iron Pickaxe
+
 Question: How do I get netherite?
 Title: How to Get Netherite
 
@@ -93,6 +96,18 @@ def normalize_title(value: str, max_length: int) -> str:
 def fallback_title(question: str, max_length: int) -> str:
     title = " ".join(question.split()).strip()
     title = re.sub(r"[?!.,:;]+$", "", title).strip()
+
+    recipe_match = re.fullmatch(
+        r"what(?:'s|\s+is)\s+the\s+(?:crafting\s+)?recipe\s+(?:of|for)\s+"
+        r"(?:(a|an|the)\s+)?(.+)",
+        title,
+        flags=re.IGNORECASE,
+    )
+    if recipe_match:
+        article, subject = recipe_match.groups()
+        subject = subject.strip().title()
+        subject_with_article = f"{article.casefold()} {subject}" if article else subject
+        return normalize_title(f"How to Make {subject_with_article}", max_length)
 
     intent_match = re.fullmatch(
         r"(?:how\s+(?:do|can|should)\s+i|how\s+to)\s+"
