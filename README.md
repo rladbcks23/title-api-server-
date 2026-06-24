@@ -1,6 +1,7 @@
 # Mine Tuning Title Server
 
-`Qwen3.5-0.8B`로 첫 질문과 첫 답변을 요약해 채팅방 제목을 반환하는 Django REST Framework API 서버입니다.
+A Django REST Framework API that uses `Qwen3.5-4B` to generate a concise
+English title from a chat question and answer.
 
 ## API
 
@@ -9,57 +10,48 @@
 ```json
 {
   "status": "ok",
-  "model": "Qwen/Qwen3.5-0.8B",
-  "loaded": false
+  "model": "Qwen/Qwen3.5-4B",
+  "loaded": true
 }
 ```
 
 ### `POST /api/titles/`
 
-요청:
+Request:
 
 ```json
 {
-  "question": "다이아는 어떻게 캐?",
-  "answer": "다이아몬드는 Y -59 부근에서 찾기 좋습니다."
+  "question": "How do I mine diamonds?",
+  "answer": "Search around Y level -59."
 }
 ```
 
-응답:
+Response:
 
 ```json
 {
-  "title": "다이아몬드 채굴법",
+  "title": "Mining Diamonds",
   "source": "model",
-  "model": "Qwen/Qwen3.5-0.8B"
+  "model": "Qwen/Qwen3.5-4B"
 }
 ```
 
-모델 로드 또는 추론에 실패하면 `source`는 `fallback`이 됩니다.
+If model loading or generation fails, `source` is set to `fallback`.
 
-## 실행
+## Run
 
 ```powershell
-cd C:\Users\SSAFY\Desktop\rladbcks\title_server
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-Copy-Item .env.example .env
-python manage.py runserver 127.0.0.1:8100
+cd C:\Users\SSAFY\Desktop\rladbcks\title-api-server-
+.\venv\Scripts\Activate.ps1
+python manage.py runserver 127.0.0.1:8100 --noreload
 ```
 
-첫 제목 요청 시 모델이 다운로드되고 메모리에 로드됩니다. 서버 시작 시 미리 로드하려면 `.env`에 다음 값을 사용합니다.
+Set `TITLE_MODEL_EAGER_LOAD=true` in `.env` to load the model when the server
+starts.
 
-```env
-TITLE_MODEL_EAGER_LOAD=true
-```
-
-실제 모델 저장소 ID가 다르면 `TITLE_MODEL_ID`만 변경하면 됩니다.
-
-## 테스트
+## Test
 
 ```powershell
 python manage.py test
 python manage.py check
 ```
-

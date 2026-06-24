@@ -1,4 +1,4 @@
-import os
+﻿import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -38,7 +38,7 @@ DATABASES = {
     }
 }
 
-LANGUAGE_CODE = "ko-kr"
+LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Seoul"
 USE_I18N = True
 USE_TZ = True
@@ -56,7 +56,7 @@ REST_FRAMEWORK = {
     "UNAUTHENTICATED_USER": None,
 }
 
-TITLE_MODEL_ID = os.getenv("TITLE_MODEL_ID", "Qwen/Qwen3.5-0.8B")
+TITLE_MODEL_ID = os.getenv("TITLE_MODEL_ID", "Qwen/Qwen3.5-4B")
 TITLE_MODEL_DEVICE = os.getenv("TITLE_MODEL_DEVICE", "auto")
 TITLE_MODEL_DTYPE = os.getenv("TITLE_MODEL_DTYPE", "auto")
 TITLE_MODEL_MAX_NEW_TOKENS = int(os.getenv("TITLE_MODEL_MAX_NEW_TOKENS", "24"))
@@ -67,3 +67,4 @@ TITLE_MODEL_EAGER_LOAD = os.getenv(
     "TITLE_MODEL_EAGER_LOAD",
     "true",
 ).lower() in {"1", "true", "yes", "on"}
+
