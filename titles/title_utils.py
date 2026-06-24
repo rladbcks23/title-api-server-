@@ -118,6 +118,15 @@ def fallback_title(question: str, max_length: int) -> str:
             title = f"How to Use {subject_with_article}"
         return normalize_title(title, max_length)
 
+    generic_how_match = re.fullmatch(
+        r"(?:how\s+(?:do|can|should)\s+i|how\s+to)\s+(.+)",
+        title,
+        flags=re.IGNORECASE,
+    )
+    if generic_how_match:
+        action_phrase = generic_how_match.group(1).strip().title()
+        return normalize_title(f"How to {action_phrase}", max_length)
+
     title = re.sub(
         r"^(?:can|could|would)\s+you\s+(?:please\s+)?",
         "",
@@ -154,6 +163,10 @@ def is_usable_model_title(title: str, question: str) -> bool:
         return False
     if re.search(r"\d", title):
         return False
-    if re.search(r"\b(?:how|what|where|when|why|who)\b", title, re.IGNORECASE):
+    if re.search(
+        r"^(?:how\s+(?:do|can|should|would)\b|what\b|where\b|when\b|why\b|who\b)",
+        title,
+        re.IGNORECASE,
+    ):
         return False
     return True

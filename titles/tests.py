@@ -34,9 +34,31 @@ class TitleUtilsTests(SimpleTestCase):
             "How to Craft an Iron Pickaxe",
         )
 
+    def test_fallback_title_handles_unlisted_how_do_i_question(self):
+        self.assertEqual(
+            fallback_title("How do I mine diamonds?", 40),
+            "How to Mine Diamonds",
+        )
+
     def test_model_title_rejects_answer_coordinates(self):
         self.assertFalse(
             is_usable_model_title("Diamonds at Y-59", "How do I mine diamonds?")
+        )
+
+    def test_model_title_accepts_how_to_format(self):
+        self.assertTrue(
+            is_usable_model_title(
+                "How to Mine Diamonds",
+                "How do I mine diamonds?",
+            )
+        )
+
+    def test_model_title_rejects_question_format(self):
+        self.assertFalse(
+            is_usable_model_title(
+                "How do I Mine Diamonds",
+                "How do I mine diamonds?",
+            )
         )
 
     def test_connection_error_answer_is_ignored(self):
