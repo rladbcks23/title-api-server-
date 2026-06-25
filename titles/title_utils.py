@@ -98,7 +98,7 @@ def fallback_title(question: str, max_length: int) -> str:
     title = re.sub(r"[?!.,:;]+$", "", title).strip()
 
     recipe_match = re.fullmatch(
-        r"what(?:'s|\s+is)\s+the\s+(?:crafting\s+)?recipe\s+(?:of|for)\s+"
+        r"what(?:'s|\s+is)\s+(?:the\s+)?(?:crafting\s+)?recipe\s+(?:of|for)\s+"
         r"(?:(a|an|the)\s+)?(.+)",
         title,
         flags=re.IGNORECASE,
