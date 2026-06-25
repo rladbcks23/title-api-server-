@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: title-api-server
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn title_server.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --timeout 120
+    healthCheckPath: /api/health/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_SECURE_SSL_REDIRECT
+        value: "true"
+      - key: DJANGO_SECURE_HSTS_SECONDS
+        value: "3600"
+      - key: TITLE_MODEL_ENABLED
+        value: "false"
+      - key: TITLE_MODEL_EAGER_LOAD
+        value: "false"
+      - key: TITLE_MODEL_ID
+        value: Qwen/Qwen3.5-0.8B

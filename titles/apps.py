@@ -20,7 +20,11 @@ class TitlesConfig(AppConfig):
             command in sys.argv
             for command in management_commands
         )
-        if settings.TITLE_MODEL_EAGER_LOAD and not is_management_command:
+        if (
+            settings.TITLE_MODEL_ENABLED
+            and settings.TITLE_MODEL_EAGER_LOAD
+            and not is_management_command
+        ):
             from .model_service import title_model_service
 
             title_model_service.load()

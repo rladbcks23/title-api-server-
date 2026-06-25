@@ -14,6 +14,9 @@ ALLOWED_HOSTS = [
     for host in os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
     if host.strip()
 ]
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
@@ -25,6 +28,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "title_server.urls"
@@ -57,6 +62,10 @@ REST_FRAMEWORK = {
 }
 
 TITLE_MODEL_ID = os.getenv("TITLE_MODEL_ID", "Qwen/Qwen3.5-9B")
+TITLE_MODEL_ENABLED = os.getenv(
+    "TITLE_MODEL_ENABLED",
+    "true",
+).lower() in {"1", "true", "yes", "on"}
 TITLE_MODEL_DEVICE = os.getenv("TITLE_MODEL_DEVICE", "auto")
 TITLE_MODEL_DTYPE = os.getenv("TITLE_MODEL_DTYPE", "auto")
 TITLE_MODEL_MAX_NEW_TOKENS = int(os.getenv("TITLE_MODEL_MAX_NEW_TOKENS", "24"))
@@ -68,3 +77,13 @@ TITLE_MODEL_EAGER_LOAD = os.getenv(
     "true",
 ).lower() in {"1", "true", "yes", "on"}
 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = os.getenv(
+    "DJANGO_SECURE_SSL_REDIRECT",
+    "false",
+).lower() in {"1", "true", "yes", "on"}
+CSRF_COOKIE_SECURE = SECURE_SSL_REDIRECT
+SESSION_COOKIE_SECURE = SECURE_SSL_REDIRECT
+SECURE_HSTS_SECONDS = int(os.getenv("DJANGO_SECURE_HSTS_SECONDS", "0"))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = SECURE_HSTS_SECONDS > 0
+SECURE_HSTS_PRELOAD = False

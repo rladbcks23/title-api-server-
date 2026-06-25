@@ -97,6 +97,23 @@ class TitleApiTests(SimpleTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "ok")
+        self.assertTrue(response.json()["model_enabled"])
+
+    @override_settings(TITLE_MODEL_ENABLED=False)
+    @patch("titles.views.title_model_service.generate")
+    def test_title_generation_skips_disabled_model(self, generate):
+        response = self.client.post(
+            "/api/titles/",
+            {
+                "question": "How do I mine diamonds?",
+                "answer": "Search around Y level -59.",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["source"], "fallback")
+        generate.assert_not_called()
 
     @patch("titles.views.title_model_service.generate")
     def test_title_generation(self, generate):
